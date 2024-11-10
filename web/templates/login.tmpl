@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>lab2</title>
+    <script>
+        const login = () => {
+            const username = document.getElementById("usr").value
+            const password = document.getElementById("pwd").value
+
+            fetch("/user/login", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    username: username,
+                    password: password
+                })
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (data.success) {
+                    alert("Login success")
+                    window.location.href = "/"
+                } else {
+                    alert("Login failed")
+                }
+            })
+        }
+    </script>
+</head>
+<style>
+    body {
+        margin: 0;
+        padding: 0;
+        height: 100vh;
+        width: 100vw;
+        background-color: #f0f0f0;
+        color: #000000;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+    }
+
+    input {
+        margin: 0.5rem;
+        padding: 0.5rem;
+        border: 1px solid #000000;
+        border-radius: 5px;
+    }
+
+    button {
+        text-decoration: none;
+        border: none;
+        border-radius: 0.5rem;
+        padding: 0.5rem 1rem;
+        background-color: #000000;
+        font-size: 1.5rem;
+        color: #ffffff;
+    }
+</style>
+<body>
+    <h3>Login</h3>
+    <input id="usr" type="text" required>
+    <input id="pwd" type="text" required>
+    <button onclick="login()">Login</button>
+</body>
+</html>

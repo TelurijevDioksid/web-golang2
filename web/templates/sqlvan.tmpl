@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>lab2</title>
+    <script>
+        const simLogin = () => {
+            const username = document.getElementById("usr").value
+            const password = document.getElementById("pwd").value
+            const chk = document.getElementById("chk").checked
+            const sts = document.getElementById("sts")
+
+            data = {
+                inj: chk ? "true" : "false",
+                username: username,
+                password: password,
+            }
+
+            fetch("/sql", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(data)
+            })
+            .then(res => res.json())
+            .then(data => { sts.textContent = JSON.stringify(data) })
+            .catch(err => { sts.textContent = err.message })
+        }
+    </script>
+</head>
+<style>
+    body {
+        margin: 0;
+        padding: 0;
+        height: 100vh;
+        width: 100vw;
+        background-color: #f0f0f0;
+        color: #000000;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+    }
+
+    input {
+        margin: 0.5rem;
+        padding: 0.5rem;
+        border: 2px solid #000000;
+        border-radius: 10px;
+    }
+
+    button {
+        margin: 0.5rem;
+        text-decoration: none;
+        border: none;
+        border-radius: 0.5rem;
+        padding: 0.5rem 1rem;
+        background-color: #000000;
+        font-size: 1.5rem;
+        color: #ffffff;
+    }
+
+    .scale {
+        transform: scale(1.5);
+    }
+
+    .bw {
+        width: 80%;
+        max-width: 800px;
+        word-break: break-all;
+    }
+
+    .tc {
+        text-align: center;
+    }
+
+    p {
+        width: 80%;
+        max-width: 800px;
+    }
+</style>
+<body>
+    <h3>SQL umetanje</h3>
+    <p>
+        <strong>Upute: </strong>Simulacija login forme koja ispisuje <em>response</em> poruku ispod gumba. Ukoliko se upiše npr.
+    </p>
+    <p class="tc">
+        <em>username</em>: <strong>ime1</strong>
+    </p>
+    <p class="tc">
+        <em>password</em>: <strong>lozinka1</strong>
+    </p>
+    <p>
+        te se checkbox pusti prazin, koristi se sigurna metoda dohvaćanja podataka iz baze čime se
+        ispisuje <em>JSON</em> oblik korisnika. Za korištenje napada potrebno je  . Može se isprobati sa npr.
+    </p>
+    <p class="tc">
+        <em>username</em>: <strong>nevazno' OR 1 = 1--</strong>
+    </p>
+    <p class="tc">
+        <em>password</em>: <strong>komentar</strong>
+    </p>
+    <p>
+        te će se time dobiti sadržaj tablice <em>users</em> iz baze podataka, odnosno stupci
+        <em>username</em> i <em>password</em>. Ispisuje se <em>JSON</em> polje korisnika pomoću
+        <em>JSON.stringify()</em> metode.
+    </p>
+    <label for="usr">Username:</label>
+    <input id="usr" type="text" required>
+    <label for="pwd">Password:</label>
+    <input id="pwd" type="text" required>
+    <label for="chk">Koristi ranjivost:</label>
+    <input class="scale" type="checkbox" id="chk">
+    <button onclick="simLogin()">Login</button>
+    <div id="sts" class="bw"></div>
+</body>
+</html>
