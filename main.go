@@ -9,14 +9,14 @@ import (
 	"web-lab2/platform/middleware"
 	"web-lab2/platform/router"
 
-	"github.com/joho/godotenv"
+	// "github.com/joho/godotenv"
 )
 
 func main() {
-	err := godotenv.Load()
-	if err != nil {
-		log.Fatal("Error loading .env file")
-	}
+	// err := godotenv.Load()
+	// if err != nil {
+		// log.Fatal("Error loading .env file")
+	// }
 
 	db, err := database.New(os.Getenv("DB_CONN_STR"))
 	if err != nil {
