@@ -6,20 +6,27 @@
     <script>
         const submit = () => {
             const chk = document.getElementById("chk").checked
-            const sts = document.getElementById("status")
+            const sts = document.getElementById("sts")
+            const fsts = document.getElementById("fetchSts")
+            const sendTok = document.getElementById("sendTok").checked
 
-            const url = chk ? "/user/delete/on" : "/user/delete/off"
+            const url = chk ? "/user/delete/off" : "/user/delete/on"
 
             const hdrs = new Headers()
-            if (chk) {
+            if (sendTok) {
                 hdrs.append("X-CSRF-TOKEN", "{{.Token}}")
             }
 
             fetch(url, { method: "DELETE", headers: hdrs })
-                .then(res => res.json())
-                .then(data => { sts.textContent = JSON.stringify(data) })
-
-            sts.innerHTML = "Try to <a href="/user/login">login</a> again"
+            .then(res => {
+                if (res.status === 200) {
+                    sts.innerHTML = `<p>Probajte se ponovno <a href="/user/login">prijaviti</a> kako bi vidjeli promjene.</p>`
+                }
+                return res.json()
+            })
+            .then(data => {
+                fsts.textContent = "Response: " + JSON.stringify(data)
+            })
         }
     </script>
 </head>
@@ -48,22 +55,42 @@
         font-size: 1.5rem;
         color: #ffffff;
     }
+
+    .scale {
+        transform: scale(1.5);
+    }
+
+    p {
+        width: 80%;
+        max-width: 800px;
+    }
 </style>
 <body>
     <h3>CSRF</h3>
     <p>
-        Ovo je stranica za testiranje CSRF napada. Točnije stranica simulira napad pomoću skrivene
-        forme kakvu bi napadač mogao napraviti. Ideja je da se korisnik prijavi te se time otvara
-        sjednica koja sadrži ID prijavljenog korisnika. Nakon toga korisnik posjeti zlonamjernu
-        stranicu koja sadrži skrivenu formu koja se automatski šalje (u ovom slučaju klikom na gumb
-        Submit). Preglednik šalje sve kolačiće koji pripadaju domeni stranice koju korisnik posjećuje
-        pa tako i kolačić koji sadrži ID prijavljenog korisnika. Taj ID se koristi za brisanje korisnika
-        iz baze podataka bez da je korisnik toga svjestan. Za korištenje napada potrebno je  .
-        Simuliranje napada se vrši tako da se označi checkbox te se klikne na gumb Submit.
+        U sjednici se nalazi ID prijavljenog korisnika koji se koristi za brisanje korisnika
+        iz baze podataka. Za korištenje napada potrebno je   i kliknuti na gumb Submit. Ukoliko
+        je označena opcija korištenja csrf napada, tada će se poslati zahtjev na /user/delete/off
+        koji ne koristi <em>middleware</em> za provjeru tokena u zaglavlju. Ukoliko je isključena
+        opcija korištenja csrf napada, tada će se poslati zahtjev na /user/delete/on koji koristi
+        <em>middleware</em> za provjeru CSRF tokena u zaglavlju.
     </p>
-    <label for="chk">Koristi CSRF</label>
-    <input type="checkbox" id="chk" name="prevent" value="false">
-    <button onclick="submit()">Submit<button>
+    <p>
+        Dodatni checkbox omogućuje slanje pravog CSRF tokena u zaglavlju zahtjeva. Ukoliko je
+        označen, tada će se poslati pravi CSRF token u zaglavlju zahtjeva. Ukoliko nije označen, u
+        zaglavlju zahtjeva neće postojati CSRF token.
+    </p>
+    <label for="chk">Omogući CSRF (ne provjeravaj token u zaglavlju)</label>
+    <input type="checkbox" class="scale" id="chk">
+    <label for="sendTok">Pošalji pravi CSFR token</label>
+    <input type="checkbox" class="scale" id="sendTok">
+    <button onclick="submit()">Submit</button>
+    {{ if ne .User "" }}
+        <p>Prijavljeni ste kao: {{.User}}</p>
+    {{ else }}
+        <a href="/user/login">Niste prijavljeni, prijavite se.</a>
+    {{ end }}
+    <div id="fetchSts"></div>
     <div id="sts"></div>
 </body>
 </html>

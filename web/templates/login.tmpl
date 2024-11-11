@@ -18,13 +18,11 @@
                     password: password
                 })
             })
-            .then(res => res.json())
-            .then(data => {
-                if (data.success) {
-                    alert("Login success")
+            .then(res => {
+                if (res.status === 200) {
                     window.location.href = "/"
                 } else {
-                    alert("Login failed")
+                    res.json().then(data => { alert(data) })
                 }
             })
         }
@@ -52,6 +50,7 @@
     }
 
     button {
+        cursor: pointer;
         text-decoration: none;
         border: none;
         border-radius: 0.5rem;
@@ -63,6 +62,9 @@
 </style>
 <body>
     <h3>Login</h3>
+    <p>Primjer postojećih korisnika:</p>
+    <p>Username: <strong>ime1</strong>, <strong>ime2</strong>, <strong>ime3</strong>, <strong>ime4</strong></p>
+    <p>Password: <strong>lozinka1</strong>, <strong>lozinka2</strong>, <strong>lozinka3</strong>, <strong>lozinka4</strong></p>
     <input id="usr" type="text" required>
     <input id="pwd" type="text" required>
     <button onclick="login()">Login</button>

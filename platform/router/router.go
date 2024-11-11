@@ -31,7 +31,7 @@ func New(db *database.PostgresStorage, csrfMid *middleware.CSRFMiddleware) *gin.
 	rtr.DELETE("/user/delete/off", middleware.Auth(), user.Delete(db))
 	rtr.DELETE("/user/delete/on", middleware.Auth(), csrfMid.ValidateCSRF(), user.Delete(db))
 	rtr.DELETE("/user/logout", middleware.Auth(), user.Logout)
-	rtr.GET("/csrf", csrfvan.Page(csrfMid))
+	rtr.GET("/csrf", csrfvan.Page(csrfMid, db))
 
 	rtr.GET("/sql", sqlvan.Page)
 	rtr.POST("/sql", sqlvan.SimLogin(db))

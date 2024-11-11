@@ -9,7 +9,7 @@ import (
 
 func Page(db *database.PostgresStorage) gin.HandlerFunc {
 	return func(ctx *gin.Context) {
-		username := "none"
+		username := ""
 		session := sessions.Default(ctx)
 		id := session.Get("userID")
 		if id != nil {

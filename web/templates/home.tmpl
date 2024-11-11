@@ -54,7 +54,11 @@
     <a href="/csrf">CSRF</a>
     <a href="/user/signup">Sign up Page (Kreiraj korisnika)</a>
     <a href="/user/login">Login Page</a>
-    <button onclick="logout()">Logout</a>
-    <div>Logged in user: {{.User}}</div>
+    <button onclick="logout()">Logout</button>
+    {{ if ne .User "" }}
+        <div>Prijavljeni ste kao: {{ .User }}</div>
+    {{ else }}
+        <div>Niste prijavljeni, prijavite se klikom na Login Page</div>
+    {{ end }}
 </body>
 </html>

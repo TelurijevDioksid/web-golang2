@@ -37,6 +37,7 @@ func (m *CSRFMiddleware) ValidateCSRF() gin.HandlerFunc {
 
 		if token != m.token {
 			ctx.JSON(400, "CSRF token mismatch")
+            ctx.Abort()
 		}
 
 		ctx.Next()

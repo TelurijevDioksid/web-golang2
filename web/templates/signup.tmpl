@@ -8,7 +8,7 @@
             const username = document.getElementById("usr").value
             const password = document.getElementById("pwd").value
 
-            fetch("/user/singup", {
+            fetch("/user/signup", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"
@@ -18,13 +18,11 @@
                     password: password
                 })
             })
-            .then(res => res.json())
-            .then(data => {
-                if (data.success) {
-                    alert("Sign up success")
+            .then(res => {
+                if (res.status === 200) {
                     window.location.href = "/"
                 } else {
-                    alert("Sign up failed")
+                    res.json().then(data => { alert(data) })
                 }
             })
         }
@@ -52,6 +50,7 @@
     }
 
     button {
+        cursor: pointer;
         text-decoration: none;
         border: none;
         border-radius: 0.5rem;
@@ -62,9 +61,9 @@
     }
 </style>
 <body>
-    <h3>Login</h3>
+    <h3>Sign up</h3>
     <input id="usr" type="text" required>
     <input id="pwd" type="text" required>
-    <button onclick="signup()">Login</button>
+    <button onclick="signup()">Sign up</button>
 </body>
 </html>

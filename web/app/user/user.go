@@ -35,6 +35,8 @@ func Signup(db *database.PostgresStorage) gin.HandlerFunc {
 		session := sessions.Default(ctx)
 		session.Set("userID", id)
 		session.Save()
+
+		ctx.JSON(200, "User created")
 	}
 }
 
@@ -64,6 +66,8 @@ func Login(db *database.PostgresStorage) gin.HandlerFunc {
 		session := sessions.Default(ctx)
 		session.Set("userID", user.ID)
 		session.Save()
+
+		ctx.JSON(200, "Logged in")
 	}
 }
 
@@ -88,6 +92,8 @@ func Delete(db *database.PostgresStorage) gin.HandlerFunc {
 
 		session.Clear()
 		session.Save()
+
+        ctx.JSON(200, "User deleted")
 	}
 }
 
